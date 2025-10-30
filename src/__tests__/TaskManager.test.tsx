@@ -228,6 +228,44 @@ describe('TaskManager', () => {
     });
   });
 
+  it('shows success notification when deleting a task', async () => {
+    const ret = baseReturn();
+    ret.tasks = [makeTask({ id: '1', title: 'Task to delete' })];
+    mockUseTasks.mockReturnValue(ret);
+    render(<TaskManager />);
+
+    // Open delete modal and confirm
+    fireEvent.click(screen.getByRole('button', { name: /delete task/i }));
+    fireEvent.click(screen.getByRole('button', { name: /delete action/i }));
+
+    await waitFor(() => {
+      expect(ret.deleteTask).toHaveBeenCalledWith('1');
+      expect(screen.getByText(/task deleted successfully/i)).toBeInTheDocument();
+    });
+  });
+
+  it('shows success notification when editing a task', async () => {
+    const ret = baseReturn();
+    ret.tasks = [makeTask({ id: '1', title: 'Original Title' })];
+    mockUseTasks.mockReturnValue(ret);
+    render(<TaskManager />);
+
+    // Enter edit mode
+    fireEvent.click(screen.getByRole('button', { name: /edit task/i }));
+    
+    // Change title
+    const titleInput = screen.getByLabelText(/task title/i);
+    fireEvent.change(titleInput, { target: { value: 'Updated Title' } });
+    
+    // Save
+    fireEvent.click(screen.getByRole('button', { name: /save task/i }));
+
+    await waitFor(() => {
+      expect(ret.updateTask).toHaveBeenCalled();
+      expect(screen.getByText(/task updated successfully/i)).toBeInTheDocument();
+    });
+  });
+
   it('canceling task form closes it without adding task', async () => {
     const ret = baseReturn();
     mockUseTasks.mockReturnValue(ret);
