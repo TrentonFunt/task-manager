@@ -13,6 +13,9 @@ dist-ssr
 *.local
 .env
 
+# Testing development log (local only)
+TESTING_DEVELOPMENT_LOG.md
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
