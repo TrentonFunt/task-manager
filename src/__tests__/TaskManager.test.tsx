@@ -126,4 +126,139 @@ describe('TaskManager', () => {
       expect(screen.getByText(/logged out successfully/i)).toBeInTheDocument();
     });
   });
+
+  it('shows error notification when logout fails', async () => {
+    const ret = baseReturn();
+    mockUseTasks.mockReturnValue(ret);
+    mockSignOut.mockRejectedValueOnce(new Error('Network error'));
+    render(<TaskManager />);
+
+    fireEvent.click(screen.getByRole('button', { name: /logout from application/i }));
+    fireEvent.click(screen.getByRole('button', { name: /logout action/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/failed to logout/i)).toBeInTheDocument();
+    });
+  });
+
+  it('cancelling logout modal closes it without signing out', async () => {
+    const ret = baseReturn();
+    mockUseTasks.mockReturnValue(ret);
+    render(<TaskManager />);
+
+    fireEvent.click(screen.getByRole('button', { name: /logout from application/i }));
+    expect(screen.getByRole('dialog', { name: /logout/i })).toBeInTheDocument();
+    
+    fireEvent.click(screen.getByRole('button', { name: /stay/i }));
+
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog', { name: /logout/i })).not.toBeInTheDocument();
+    });
+    expect(mockSignOut).not.toHaveBeenCalled();
+  });
+
+  it('filters tasks by category', () => {
+    const ret = baseReturn();
+    ret.tasks = [
+      makeTask({ id: '1', title: 'Work Task', category: 'Work' }),
+      makeTask({ id: '2', title: 'Personal Task', category: 'Personal' }),
+    ];
+    mockUseTasks.mockReturnValue(ret);
+    render(<TaskManager />);
+
+    expect(screen.getAllByRole('article')).toHaveLength(2);
+
+    fireEvent.change(screen.getByLabelText(/filter tasks by category/i), {
+      target: { value: 'Work' },
+    });
+
+    expect(screen.getAllByRole('article')).toHaveLength(1);
+    expect(screen.getByText(/work task/i)).toBeInTheDocument();
+  });
+
+  it('filters tasks by priority', () => {
+    const ret = baseReturn();
+    ret.tasks = [
+      makeTask({ id: '1', title: 'High Priority', priority: 'high' }),
+      makeTask({ id: '2', title: 'Low Priority', priority: 'low' }),
+    ];
+    mockUseTasks.mockReturnValue(ret);
+    render(<TaskManager />);
+
+    expect(screen.getAllByRole('article')).toHaveLength(2);
+
+    fireEvent.change(screen.getByLabelText(/filter tasks by priority level/i), {
+      target: { value: 'high' },
+    });
+
+    expect(screen.getAllByRole('article')).toHaveLength(1);
+    expect(screen.getByText(/high priority/i)).toBeInTheDocument();
+  });
+
+  it('filters tasks by search query', () => {
+    const ret = baseReturn();
+    ret.tasks = [
+      makeTask({ id: '1', title: 'Buy groceries', description: 'Milk and bread' }),
+      makeTask({ id: '2', title: 'Write report', description: 'Q4 analysis' }),
+    ];
+    mockUseTasks.mockReturnValue(ret);
+    render(<TaskManager />);
+
+    expect(screen.getAllByRole('article')).toHaveLength(2);
+
+    fireEvent.change(screen.getByLabelText(/search tasks/i), {
+      target: { value: 'groceries' },
+    });
+
+    expect(screen.getAllByRole('article')).toHaveLength(1);
+    expect(screen.getByText(/buy groceries/i)).toBeInTheDocument();
+  });
+
+  it('shows error notification when addTask fails', async () => {
+    const ret = baseReturn();
+    ret.addTask.mockRejectedValueOnce(new Error('Firestore error'));
+    mockUseTasks.mockReturnValue(ret);
+    render(<TaskManager />);
+
+    fireEvent.click(screen.getByRole('button', { name: /add new task/i }));
+    fireEvent.click(screen.getByText('__submit_mock__'));
+
+    await waitFor(() => {
+      expect(screen.getByText(/failed to create task/i)).toBeInTheDocument();
+    });
+  });
+
+  it('canceling task form closes it without adding task', async () => {
+    const ret = baseReturn();
+    mockUseTasks.mockReturnValue(ret);
+    render(<TaskManager />);
+
+    fireEvent.click(screen.getByRole('button', { name: /add new task/i }));
+    expect(screen.getByText('__submit_mock__')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('__cancel_mock__'));
+
+    await waitFor(() => {
+      expect(screen.queryByText('__submit_mock__')).not.toBeInTheDocument();
+    });
+    expect(ret.addTask).not.toHaveBeenCalled();
+  });
+
+  it('shows success notification when toggling task completion', async () => {
+    const ret = baseReturn();
+    ret.tasks = [makeTask({ id: '1', title: 'Task', completed: false })];
+    mockUseTasks.mockReturnValue(ret);
+    render(<TaskManager />);
+
+    // Find and click the complete button
+    const completeButton = screen.getByRole('button', { name: /mark task as complete/i });
+    fireEvent.click(completeButton);
+
+    await waitFor(() => {
+      expect(ret.toggleTaskCompletion).toHaveBeenCalledWith('1', true);
+      expect(screen.getByText(/task completed/i)).toBeInTheDocument();
+    });
+  });
+
+
 });
