@@ -52,6 +52,10 @@ const Register: React.FC = () => {
         className='bg-white p-8 rounded-lg shadow-2xl w-full max-w-md'
         aria-label='Registration form'
       >
+        <div className='text-center mb-6'>
+          <h1 className='text-4xl font-bold text-gray-800 mb-2'>Task Manager</h1>
+          <p className='text-gray-600 text-sm'>Organize your tasks efficiently</p>
+        </div>
         <h2 className='text-3xl font-bold mb-6 text-center text-gray-800'>Register</h2>
         {error && (
           <div 
