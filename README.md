@@ -15,11 +15,11 @@ A modern, full-featured task management application built with React, TypeScript
 *Custom React hooks tests for authentication and task management*
 
 ### E2E Testing
-![Task Management Dashboard](./public/cypress-testing-personal/Screenshot%202025-11-01%20at%2000.48.25.png)
-*Cypress E2E test: Task management dashboard with filters and search*
+![User Registration Form](./public/cypress-testing-personal/Screenshot%202025-11-01%20at%2000.48.25.png)
+*Cypress E2E test: User registration with form validation*
 
-![Task Creation and Editing](./public/cypress-testing-personal/Screenshot%202025-11-01%20at%2000.48.25%201.png)
-*Cypress E2E test: Creating and editing tasks with real-time updates*
+![Registration Success](./public/cypress-testing-personal/Screenshot%202025-11-01%20at%2000.48.25%201.png)
+*Cypress E2E test: Successful user registration and redirect to dashboard*
 
 ![Filter Testing](./cypress/screenshots/filters.cy.ts/should%20filter%20tasks%20by%20Work%20category%20--%20after%20each%20hook.png)
 *Cypress E2E test: Task filtering functionality*
