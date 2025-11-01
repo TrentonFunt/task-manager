@@ -29,3 +29,7 @@ TESTING_DEVELOPMENT_LOG.md
 
 # Cypress videos (too large for repo)
 cypress/videos/
+
+# Firestore rules and docs (local only; do not push)
+firestore.rules
+FIRESTORE_RULES.md
