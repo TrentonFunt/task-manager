@@ -26,3 +26,6 @@ TESTING_DEVELOPMENT_LOG.md
 *.njsproj
 *.sln
 *.sw?
+
+# Cypress videos (too large for repo)
+cypress/videos/
