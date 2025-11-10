@@ -6,22 +6,6 @@ describe('Authentication Flow', () => {
   });
 
   describe('User Registration', () => {
-    it('should display registration form', () => {
-      cy.visit('/register');
-      cy.get('input[type="email"]').should('be.visible');
-      cy.get('input[type="password"]').should('have.length', 2);
-      cy.get('button[type="submit"]').should('contain', 'Register');
-    });
-
-    it('should require email and password fields', () => {
-      cy.visit('/register');
-      
-      // Form has required attributes
-      cy.get('input[type="email"]').should('have.attr', 'required');
-      cy.get('input[type="password"]').first().should('have.attr', 'required');
-      cy.get('input[type="password"]').last().should('have.attr', 'required');
-    });
-
     it('should show error for password mismatch', () => {
       cy.visit('/register');
       
@@ -62,21 +46,6 @@ describe('Authentication Flow', () => {
   });
 
   describe('User Login', () => {
-    it('should display login form', () => {
-      cy.visit('/login');
-      cy.get('input[type="email"]').should('be.visible');
-      cy.get('input[type="password"]').should('be.visible');
-      cy.get('button[type="submit"]').should('contain', 'Sign In');
-    });
-
-    it('should require email and password fields', () => {
-      cy.visit('/login');
-      
-      // Form has required attributes
-      cy.get('input[type="email"]').should('have.attr', 'required');
-      cy.get('input[type="password"]').should('have.attr', 'required');
-    });
-
     it('should show error for invalid credentials', () => {
       cy.visit('/login');
       

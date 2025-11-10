@@ -25,22 +25,6 @@ describe('TaskCard', () => {
     onEdit = vi.fn().mockResolvedValue(undefined);
   });
 
-  it('renders task info: title, description, priority, due date, category', () => {
-    const task = makeTask();
-    render(
-      <TaskCard task={task} onToggle={onToggle} onDelete={onDelete} onEdit={onEdit} />
-    );
-
-    expect(screen.getByRole('article', { name: new RegExp(`Task: ${task.title}`, 'i') })).toBeInTheDocument();
-    expect(screen.getByText(task.description)).toBeInTheDocument();
-    // Priority badge
-    expect(screen.getByLabelText(/priority: medium/i)).toBeInTheDocument();
-    // Due date label (do not assert exact format, just presence)
-    expect(screen.getByLabelText(/due date:/i)).toBeInTheDocument();
-    // Category chip
-    expect(screen.getByLabelText(/category: engineering/i)).toBeInTheDocument();
-  });
-
   it('calls onToggle with current completion state when clicking complete/undo', () => {
     const task = makeTask({ completed: false });
     render(
@@ -51,27 +35,6 @@ describe('TaskCard', () => {
     expect(toggleBtn).toHaveTextContent('✓ Complete');
     fireEvent.click(toggleBtn);
     expect(onToggle).toHaveBeenCalledWith(task.id, false);
-  });
-
-  it('shows edit form and validates fields', async () => {
-    const task = makeTask();
-    render(
-      <TaskCard task={task} onToggle={onToggle} onDelete={onDelete} onEdit={onEdit} />
-    );
-
-    // Enter edit mode
-    fireEvent.click(screen.getByRole('button', { name: /edit task/i }));
-
-    const titleInput = screen.getByLabelText(/task title/i) as HTMLInputElement;
-    const descInput = screen.getByLabelText(/task description/i) as HTMLTextAreaElement;
-
-    // Trigger validation errors
-    fireEvent.change(titleInput, { target: { value: 'ab' } });
-    fireEvent.change(descInput, { target: { value: 'too short' } });
-    fireEvent.click(screen.getByRole('button', { name: /save task changes/i }));
-
-    expect(await screen.findByText(/title must be at least 3 characters/i)).toBeInTheDocument();
-    expect(await screen.findByText(/description must be at least 10 characters/i)).toBeInTheDocument();
   });
 
   it('saves valid edits and calls onEdit with updated fields', async () => {

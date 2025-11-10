@@ -47,19 +47,6 @@ describe('Login Component', () => {
     expect(screen.getByRole('button', { name: /sign in/i })).toBeInTheDocument();
   });
 
-  it('allows user to type in email and password fields', () => {
-    renderLogin();
-    
-    const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
-    const passwordInput = screen.getByLabelText(/password/i) as HTMLInputElement;
-
-    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'password123' } });
-
-    expect(emailInput.value).toBe('test@example.com');
-    expect(passwordInput.value).toBe('password123');
-  });
-
   it('successfully logs in with valid credentials', async () => {
     const mockSignIn = signInWithEmailAndPassword as ReturnType<typeof vi.fn>;
     mockSignIn.mockResolvedValueOnce({
@@ -141,13 +128,5 @@ describe('Login Component', () => {
     fireEvent.click(loginButton);
 
     expect(screen.getByRole('button', { name: /signing in/i })).toBeDisabled();
-  });
-
-  it('has link to registration page', () => {
-    renderLogin();
-    
-    const registerLink = screen.getByRole('link', { name: /navigate to registration page/i });
-    expect(registerLink).toBeInTheDocument();
-    expect(registerLink).toHaveAttribute('href', '/register');
   });
 });

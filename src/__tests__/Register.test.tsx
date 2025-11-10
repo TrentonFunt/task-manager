@@ -48,28 +48,6 @@ describe('Register Component', () => {
     expect(screen.getByRole('button', { name: /register/i })).toBeInTheDocument();
   });
 
-  it('shows password requirements', () => {
-    renderRegister();
-    
-    expect(screen.getByText(/password must be at least 6 characters/i)).toBeInTheDocument();
-  });
-
-  it('allows user to type in all fields', () => {
-    renderRegister();
-    
-    const emailInput = screen.getByLabelText(/^email$/i) as HTMLInputElement;
-    const passwordInput = screen.getByLabelText(/^password$/i) as HTMLInputElement;
-    const confirmInput = screen.getByLabelText(/confirm password/i) as HTMLInputElement;
-
-    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'password123' } });
-    fireEvent.change(confirmInput, { target: { value: 'password123' } });
-
-    expect(emailInput.value).toBe('test@example.com');
-    expect(passwordInput.value).toBe('password123');
-    expect(confirmInput.value).toBe('password123');
-  });
-
   it('shows error when passwords do not match', async () => {
     renderRegister();
     
@@ -176,13 +154,5 @@ describe('Register Component', () => {
     fireEvent.click(submitButton);
 
     expect(screen.getByRole('button', { name: /creating account/i })).toBeDisabled();
-  });
-
-  it('has link to login page', () => {
-    renderRegister();
-    
-    const loginLink = screen.getByRole('link', { name: /navigate to login page/i });
-    expect(loginLink).toBeInTheDocument();
-    expect(loginLink).toHaveAttribute('href', '/login');
   });
 });

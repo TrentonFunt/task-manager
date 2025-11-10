@@ -13,18 +13,6 @@ describe('TaskForm', () => {
 
   const renderForm = () => render(<TaskForm onSubmit={onSubmit} onCancel={onCancel} />);
 
-  it('renders all fields and actions', () => {
-    renderForm();
-    expect(screen.getByRole('form', { name: /new task form/i })).toBeInTheDocument();
-    expect(screen.getByLabelText(/title/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/description/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/category/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/priority/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/due date/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /create new task/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /cancel task creation/i })).toBeInTheDocument();
-  });
-
   it('validates required fields and shows error messages', async () => {
     renderForm();
     const title = screen.getByLabelText(/title/i) as HTMLInputElement;

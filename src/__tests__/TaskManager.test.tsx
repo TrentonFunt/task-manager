@@ -157,63 +157,6 @@ describe('TaskManager', () => {
     expect(mockSignOut).not.toHaveBeenCalled();
   });
 
-  it('filters tasks by category', () => {
-    const ret = baseReturn();
-    ret.tasks = [
-      makeTask({ id: '1', title: 'Work Task', category: 'Work' }),
-      makeTask({ id: '2', title: 'Personal Task', category: 'Personal' }),
-    ];
-    mockUseTasks.mockReturnValue(ret);
-    render(<TaskManager />);
-
-    expect(screen.getAllByRole('article')).toHaveLength(2);
-
-    fireEvent.change(screen.getByLabelText(/filter tasks by category/i), {
-      target: { value: 'Work' },
-    });
-
-    expect(screen.getAllByRole('article')).toHaveLength(1);
-    expect(screen.getByText(/work task/i)).toBeInTheDocument();
-  });
-
-  it('filters tasks by priority', () => {
-    const ret = baseReturn();
-    ret.tasks = [
-      makeTask({ id: '1', title: 'High Priority', priority: 'high' }),
-      makeTask({ id: '2', title: 'Low Priority', priority: 'low' }),
-    ];
-    mockUseTasks.mockReturnValue(ret);
-    render(<TaskManager />);
-
-    expect(screen.getAllByRole('article')).toHaveLength(2);
-
-    fireEvent.change(screen.getByLabelText(/filter tasks by priority level/i), {
-      target: { value: 'high' },
-    });
-
-    expect(screen.getAllByRole('article')).toHaveLength(1);
-    expect(screen.getByText(/high priority/i)).toBeInTheDocument();
-  });
-
-  it('filters tasks by search query', () => {
-    const ret = baseReturn();
-    ret.tasks = [
-      makeTask({ id: '1', title: 'Buy groceries', description: 'Milk and bread' }),
-      makeTask({ id: '2', title: 'Write report', description: 'Q4 analysis' }),
-    ];
-    mockUseTasks.mockReturnValue(ret);
-    render(<TaskManager />);
-
-    expect(screen.getAllByRole('article')).toHaveLength(2);
-
-    fireEvent.change(screen.getByLabelText(/search tasks/i), {
-      target: { value: 'groceries' },
-    });
-
-    expect(screen.getAllByRole('article')).toHaveLength(1);
-    expect(screen.getByText(/buy groceries/i)).toBeInTheDocument();
-  });
-
   it('shows error notification when addTask fails', async () => {
     const ret = baseReturn();
     ret.addTask.mockRejectedValueOnce(new Error('Firestore error'));

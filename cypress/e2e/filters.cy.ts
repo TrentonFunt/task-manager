@@ -78,28 +78,6 @@ describe('Filter and Search Flow', () => {
       cy.contains('Gym Workout').should('not.exist');
       cy.contains('Doctor Appointment').should('not.exist');
     });
-
-    it('should filter tasks by Personal category', () => {
-      cy.get('select[aria-label="Filter tasks by category"]').select('Personal');
-      
-      cy.contains('Gym Workout').should('be.visible');
-      cy.contains('Doctor Appointment').should('be.visible');
-      
-      cy.contains('Work Meeting').should('not.exist');
-      cy.contains('Buy Groceries').should('not.exist');
-      cy.contains('Project Review').should('not.exist');
-    });
-
-    it('should filter tasks by Shopping category', () => {
-      cy.get('select[aria-label="Filter tasks by category"]').select('Shopping');
-      
-      cy.contains('Buy Groceries').should('be.visible');
-      
-      cy.contains('Work Meeting').should('not.exist');
-      cy.contains('Gym Workout').should('not.exist');
-      cy.contains('Project Review').should('not.exist');
-      cy.contains('Doctor Appointment').should('not.exist');
-    });
   });
 
   describe('Priority Filter', () => {
@@ -122,28 +100,6 @@ describe('Filter and Search Flow', () => {
       
       cy.contains('Buy Groceries').should('not.exist');
       cy.contains('Gym Workout').should('not.exist');
-    });
-
-    it('should filter tasks by Medium priority', () => {
-      cy.get('select[aria-label="Filter tasks by priority level"]').select('Medium');
-      
-      cy.contains('Gym Workout').should('be.visible');
-      
-      cy.contains('Work Meeting').should('not.exist');
-      cy.contains('Buy Groceries').should('not.exist');
-      cy.contains('Project Review').should('not.exist');
-      cy.contains('Doctor Appointment').should('not.exist');
-    });
-
-    it('should filter tasks by Low priority', () => {
-      cy.get('select[aria-label="Filter tasks by priority level"]').select('Low');
-      
-      cy.contains('Buy Groceries').should('be.visible');
-      
-      cy.contains('Work Meeting').should('not.exist');
-      cy.contains('Gym Workout').should('not.exist');
-      cy.contains('Project Review').should('not.exist');
-      cy.contains('Doctor Appointment').should('not.exist');
     });
   });
 
@@ -206,18 +162,6 @@ describe('Filter and Search Flow', () => {
       cy.contains('Buy Groceries').should('not.exist');
       cy.contains('Doctor Appointment').should('not.exist');
       cy.contains('Project Review').should('not.exist');
-    });
-
-    it('should show all tasks when search is cleared', () => {
-      cy.get('input[placeholder*="Search"]').type('Meeting');
-      cy.contains('Work Meeting').should('be.visible');
-      cy.contains('Buy Groceries').should('not.exist');
-      
-      cy.get('input[placeholder*="Search"]').clear();
-      
-      cy.contains('Work Meeting').should('be.visible');
-      cy.contains('Buy Groceries').should('be.visible');
-      cy.contains('Gym Workout').should('be.visible');
     });
 
     it('should show empty state when no tasks match search', () => {

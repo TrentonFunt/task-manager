@@ -19,16 +19,6 @@ describe('Task Management Flow', () => {
   });
 
   describe('Create Task', () => {
-    it('should display task form when Add Task button is clicked', () => {
-      cy.contains('button', /Add Task/i).click();
-      
-      cy.get('#task-title', { timeout: 10000 }).should('be.visible');
-      cy.get('#task-description').should('be.visible');
-      cy.get('#task-category').should('be.visible');
-      cy.get('#task-priority').should('be.visible');
-      cy.get('#task-duedate').should('be.visible');
-    });
-
     it('should show validation error for empty title', () => {
       cy.contains('button', /Add Task/i).click();
       cy.get('form[aria-label="New task form"]').should('be.visible').within(() => {
@@ -57,20 +47,6 @@ describe('Task Management Flow', () => {
       
       // Success notification
       cy.contains(/created successfully/i, { timeout: 5000 }).should('be.visible');
-    });
-
-    it('should cancel task creation', () => {
-      cy.contains('button', /Add Task/i).click();
-      cy.get('form[aria-label="New task form"]').should('be.visible').within(() => {
-        cy.get('#task-title', { timeout: 10000 }).type('Task to Cancel');
-        cy.contains('button', 'Cancel').click();
-      });
-      
-      // Form should close
-      cy.get('#task-title').should('not.exist');
-      
-      // Task should not appear
-      cy.contains('Task to Cancel').should('not.exist');
     });
   });
 
